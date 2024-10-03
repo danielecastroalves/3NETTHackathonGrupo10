@@ -1,9 +1,9 @@
 using System.Net;
-using HealthMed.Application.Features.Client;
-using HealthMed.Application.Features.Client.AddClient;
-using HealthMed.Application.Features.Client.DeleteClient;
-using HealthMed.Application.Features.Client.GetClient;
-using HealthMed.Application.Features.Client.UpdateClient;
+using HealthMed.Application.Features.Doctor;
+using HealthMed.Application.Features.Doctor.AddDoctor;
+using HealthMed.Application.Features.Doctor.DeleteDoctor;
+using HealthMed.Application.Features.Doctor.GetDoctor;
+using HealthMed.Application.Features.Doctor.UpdateDoctor;
 using HealthMed.WebApi.Controllers.Comum;
 using Mapster;
 using MediatR;
@@ -14,40 +14,35 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace HealthMed.WebApi.Controllers;
 
 /// <summary>
-/// Client Controller
+/// Doctor Controller
 /// </summary>
 [ApiController]
 [Route("v1")]
-public sealed class ClientController : CommonController
+public sealed class DoctorController(IMediator mediator)
+    : CommonController(mediator)
 {
     /// <summary>
-    /// Constructor
+    /// AddDoctorAsync - Create a new Doctor
     /// </summary>
-    /// <param name="mediator">Mediator DI</param>
-    public ClientController(IMediator mediator) : base(mediator) { }
-
-    /// <summary>
-    /// AddClientAsync - Create a new Client
-    /// </summary>
-    /// <param name="request">AddClient Request</param>
+    /// <param name="request">AddDoctor Request</param>
     /// <param name="cancellationToken">Cancellation Token</param>
     /// <returns>Task</returns>
-    [HttpPost("client")]
+    [HttpPost("doctor")]
     [AllowAnonymous]
-    [SwaggerOperation(OperationId = "AddClientAsync")]
+    [SwaggerOperation(OperationId = "AddDoctorAsync")]
     [SwaggerResponse
     (
         (int)HttpStatusCode.Created,
-        "Client has been created successfully"
+        "Doctor has been created successfully"
     )]
     [SwaggerResponse
     (
         (int)HttpStatusCode.BadRequest,
         "Bad Request - Invalid input or missing required parameters"
     )]
-    public async Task<IActionResult> AddClientAsync
+    public async Task<IActionResult> AddDoctorAsync
     (
-        AddClientRequest request,
+        AddDoctorRequest request,
         CancellationToken cancellationToken = default
     )
     {
@@ -60,18 +55,18 @@ public sealed class ClientController : CommonController
     }
 
     /// <summary>
-    /// GetClientAsync - Get Client from the Document
+    /// GetDoctorAsync - Get Doctor from the Document
     /// </summary>
-    /// <param name="request">GetClient Request</param>
+    /// <param name="request">GetDoctor Request</param>
     /// <param name="cancellationToken">Cancellation Token</param>
-    /// <returns>GetClientResponse</returns>
-    [HttpGet("client")]
+    /// <returns>GetDoctorResponse</returns>
+    [HttpGet("doctor")]
     [Authorize]
-    [SwaggerOperation(OperationId = "GetClientAsync")]
+    [SwaggerOperation(OperationId = "GetDoctorAsync")]
     [SwaggerResponse
     (
         (int)HttpStatusCode.OK,
-        "Here is the Client found"
+        "Here is the Doctor found"
     )]
     [SwaggerResponse
     (
@@ -83,31 +78,31 @@ public sealed class ClientController : CommonController
         (int)HttpStatusCode.Unauthorized,
         "Unauthorized - Invalid credentials or authentication token"
     )]
-    public async Task<IActionResult> GetClientAsync
+    public async Task<IActionResult> GetDoctorAsync
     (
-        [FromQuery] GetClientRequest request,
+        [FromQuery] GetDoctorRequest request,
         CancellationToken cancellationToken
     )
     {
-        var client = await _mediator.Send(request, cancellationToken);
+        var doctor = await _mediator.Send(request, cancellationToken);
 
-        return Ok(client);
+        return Ok(doctor);
     }
 
     /// <summary>
-    /// UpdateClientAsync - Updates a Client register
+    /// UpdateDoctorAsync - Updates a Doctor register
     /// </summary>
-    /// <param name="clientId">Client Id - GUID</param>
-    /// <param name="request">UpdateClient Request</param>
+    /// <param name="doctorId">Doctor Id - GUID</param>
+    /// <param name="request">UpdateDoctor Request</param>
     /// <param name="cancellationToken">Cancellation Token</param>
     /// <returns>Task</returns>
-    [HttpPut("client/{clientId}")]
+    [HttpPut("doctor/{doctorId}")]
     [Authorize]
-    [SwaggerOperation(OperationId = "UpdateClientAsync")]
+    [SwaggerOperation(OperationId = "UpdateDoctorAsync")]
     [SwaggerResponse
     (
         (int)HttpStatusCode.NoContent,
-        "Client has been updated successfully"
+        "Doctor has been updated successfully"
     )]
     [SwaggerResponse
     (
@@ -119,52 +114,52 @@ public sealed class ClientController : CommonController
         (int)HttpStatusCode.Unauthorized,
         "Unauthorized - Invalid credentials or authentication token"
     )]
-    public async Task<IActionResult> UpdateClientAsync
+    public async Task<IActionResult> UpdateDoctorAsync
     (
-        [FromRoute] Guid clientId,
-        [FromBody] ClientRequestBase request,
+        [FromRoute] Guid doctorId,
+        [FromBody] DoctorRequestBase request,
         CancellationToken cancellationToken = default
     )
     {
-        var client = request.Adapt<UpdateClientRequest>();
-        client.Id = clientId;
+        var doctor = request.Adapt<UpdateDoctorRequest>();
+        doctor.Id = doctorId;
 
-        var result = await _mediator.Send(client, cancellationToken);
+        var result = await _mediator.Send(doctor, cancellationToken);
 
         return result is null ? NotFound() : NoContent();
     }
 
     /// <summary>
-    /// DeleteClientAsync - Delete a Client register from given id
+    /// DeleteDoctorAsync - Delete a Doctor register from given id
     /// </summary>
-    /// <param name="clientId">Client Id - GUID</param>
+    /// <param name="doctorId">Doctor Id - GUID</param>
     /// <param name="cancellationToken">Cancellation Token</param>
     /// <returns>Task</returns>
-    [HttpDelete("client/{clientId}")]
+    [HttpDelete("doctor/{doctorId}")]
     [Authorize]
-    [SwaggerOperation(OperationId = "DeleteClientAsync")]
+    [SwaggerOperation(OperationId = "DeleteDoctorAsync")]
     [SwaggerResponse
     (
         (int)HttpStatusCode.OK,
-        "Client has been deleted successfully"
+        "Doctor has been deleted successfully"
     )]
     [SwaggerResponse
     (
         (int)HttpStatusCode.BadRequest,
-        "Failed to delete Client register"
+        "Failed to delete Doctor register"
     )]
     [SwaggerResponse
     (
         (int)HttpStatusCode.Unauthorized,
         "Unauthorized - Invalid credentials or authentication token"
     )]
-    public async Task<IActionResult> DeleteClientAsync
+    public async Task<IActionResult> DeleteDoctorAsync
     (
-        [FromRoute] Guid clientId,
+        [FromRoute] Guid doctorId,
         CancellationToken cancellationToken = default
     )
     {
-        await _mediator.Send(new DeleteClientRequest(clientId), cancellationToken);
+        await _mediator.Send(new DeleteDoctorRequest(doctorId), cancellationToken);
 
         return Ok();
     }
