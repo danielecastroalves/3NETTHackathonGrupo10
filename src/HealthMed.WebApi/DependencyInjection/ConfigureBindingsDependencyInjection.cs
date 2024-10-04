@@ -40,10 +40,8 @@ public static class ConfigureBindingsDependencyInjection
     {
         ConfigureBindingsMediatR(services);
         ConfigureBindingsMongo(services, configuration);
-        //ConfigureBindingsRabbitMQ(services, configuration);
         ConfigureBindingsSerilog(services);
         ConfigureBindingsValidators(services);
-
 
         // Services
         services.AddScoped<ITokenService, TokenService>();
@@ -79,40 +77,22 @@ public static class ConfigureBindingsDependencyInjection
         //Configure Mongo Serializer
         BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
 
-#pragma warning disable 618
+        #pragma warning disable 618
         BsonDefaults.GuidRepresentation = GuidRepresentation.Standard;
         BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
-#pragma warning restore
+        #pragma warning restore
 
-#pragma warning disable CS8602
+        #pragma warning disable CS8602
         var objectSerializer = new ObjectSerializer
         (
            type =>
                    ObjectSerializer.DefaultAllowedTypes(type) ||
                    type.FullName.StartsWith("Health&Med.Domain")
         );
-#pragma warning restore CS8602
+        #pragma warning restore CS8602
 
         BsonSerializer.RegisterSerializer(objectSerializer);
     }
-
-    //private static void ConfigureBindingsRabbitMQ(IServiceCollection services, IConfiguration configuration)
-    //{
-    //    services.Configure<RabbitMqConfig>(configuration.GetSection("RabbitMq"));
-
-    //    services.AddSingleton(_ =>
-    //    {
-    //        var factory = new ConnectionFactory()
-    //        {
-    //            Uri = new Uri(configuration.GetValue<string>("RabbitMq:ConnectionString"))
-    //        };
-
-    //        return factory.CreateConnection();
-    //    });
-
-    //    // RabbitMQ Services
-    //    services.AddSingleton<IMessagePublisherService, MessagePublisherService>();
-    //}
 
     private static void ConfigureBindingsSerilog(IServiceCollection services)
     {
