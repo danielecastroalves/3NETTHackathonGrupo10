@@ -88,6 +88,24 @@ public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : E
             .ReplaceOneAsync(filter, entity, cancellationToken: cancellationToken);
     }
 
+    public virtual async Task UpdateAppointmentAsync
+    (
+        Expression<Func<AppointmentSchedulingEntity, bool>> filter,
+        AppointmentSchedulingEntity entity,
+        CancellationToken cancellationToken = default
+    )
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        entity.SetDataAtualizacao();
+
+        await _context.GetCollection<AppointmentSchedulingEntity>()
+            .UpdateOneAsync(filter, new UpdateDefinitionBuilder<AppointmentSchedulingEntity>()
+                .Set(x => x.Date, entity.Date)
+                .Set(x => x.SchedulingDuration, entity.SchedulingDuration)
+                .Set(x => x.DataAtualizacao, DateTime.Now), cancellationToken: cancellationToken);
+    }
+
     public virtual async Task<bool> DeleteByIdAsync
     (
         Guid id,

@@ -40,8 +40,10 @@ public static class ConfigureBindingsDependencyInjection
     {
         ConfigureBindingsMediatR(services);
         ConfigureBindingsMongo(services, configuration);
+        //ConfigureBindingsRabbitMQ(services, configuration);
         ConfigureBindingsSerilog(services);
         ConfigureBindingsValidators(services);
+
 
         // Services
         services.AddScoped<ITokenService, TokenService>();
@@ -71,6 +73,7 @@ public static class ConfigureBindingsDependencyInjection
 
         //Configure Mongo Repositories
         services.AddScoped<IRepository<ClienteEntity>, GenericRepository<ClienteEntity>>();
+        services.AddScoped<IRepository<AppointmentSchedulingEntity>, GenericRepository<AppointmentSchedulingEntity>>();
         services.AddScoped<IUserRepository, UserRepository>();
 
         //Configure Mongo Serializer
@@ -93,6 +96,23 @@ public static class ConfigureBindingsDependencyInjection
         BsonSerializer.RegisterSerializer(objectSerializer);
     }
 
+    //private static void ConfigureBindingsRabbitMQ(IServiceCollection services, IConfiguration configuration)
+    //{
+    //    services.Configure<RabbitMqConfig>(configuration.GetSection("RabbitMq"));
+
+    //    services.AddSingleton(_ =>
+    //    {
+    //        var factory = new ConnectionFactory()
+    //        {
+    //            Uri = new Uri(configuration.GetValue<string>("RabbitMq:ConnectionString"))
+    //        };
+
+    //        return factory.CreateConnection();
+    //    });
+
+    //    // RabbitMQ Services
+    //    services.AddSingleton<IMessagePublisherService, MessagePublisherService>();
+    //}
 
     private static void ConfigureBindingsSerilog(IServiceCollection services)
     {
