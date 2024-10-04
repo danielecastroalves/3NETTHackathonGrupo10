@@ -9,7 +9,6 @@ public class ClienteEntity : User
     public string Telefone { get; set; } = null!;
     public string Email { get; set; } = null!;
     public DateTime DataNascimento { get; set; }
-    public string PerfilInvestimento { get; set; } = nameof(InvestorProfile.Indefinido);
     public List<Guid> Portfolios { get; set; } = [];
 }
 
