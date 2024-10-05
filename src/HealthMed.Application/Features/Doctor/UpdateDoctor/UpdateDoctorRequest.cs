@@ -3,7 +3,7 @@ using MediatR;
 
 namespace HealthMed.Application.Features.Doctor.UpdateDoctor;
 
-public class UpdateDoctorRequest : DoctorRequestBase, IRequest<ClienteEntity?>
+public class UpdateDoctorRequest : DoctorRequestBase, IRequest<DoctorEntity?>
 {
     public Guid Id { get; set; }
 }

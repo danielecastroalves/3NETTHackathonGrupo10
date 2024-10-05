@@ -9,7 +9,7 @@ namespace HealthMed.Application.Features.Pacient.GetPacient;
 
 public class GetPacientRequestHandler
 (
-    IRepository<ClienteEntity> repositorio,
+    IRepository<PersonEntity> repositorio,
     ILogger<GetPacientRequestHandler> logger
 ) : IRequestHandler<GetPacientRequest, GetPacientResponse>
 {
@@ -18,7 +18,7 @@ public class GetPacientRequestHandler
         cancellationToken.ThrowIfCancellationRequested();
 
         var entity = await repositorio.GetByFilterAsync(x =>
-            x.Documento.Equals(request.CPF) && x.Ativo,
+            x.CPF.Equals(request.CPF) && x.Ativo,
             cancellationToken);
 
         var response = entity.Adapt<GetPacientResponse>();

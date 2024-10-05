@@ -7,6 +7,7 @@ using HealthMed.Application.Common.Repositories;
 using HealthMed.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using HealthMed.Application.Features.Doctor.GetDoctor;
 
 namespace HealthMed.Application.Features.GetAvailableAppointments
 {
@@ -14,11 +15,13 @@ namespace HealthMed.Application.Features.GetAvailableAppointments
     {
         private readonly IRepository<AppointmentSchedulingEntity> _schedulingRepository;
         private readonly ILogger<GetAvailableAppointmentsHandler> _logger;
+        private readonly IMediator _mediator;
 
-        public GetAvailableAppointmentsHandler(IRepository<AppointmentSchedulingEntity> schedulingRepository, ILogger<GetAvailableAppointmentsHandler> logger)
+        public GetAvailableAppointmentsHandler(IRepository<AppointmentSchedulingEntity> schedulingRepository, ILogger<GetAvailableAppointmentsHandler> logger, IMediator mediator)
         {
             _schedulingRepository = schedulingRepository;
             _logger = logger;
+            _mediator = mediator;
         }
 
         public async Task<GetAvailableAppointmentsOutput> Handle(GetAvailableAppointmentsRequest request, CancellationToken cancellationToken)
@@ -28,14 +31,14 @@ namespace HealthMed.Application.Features.GetAvailableAppointments
             try
             {
                 var availableAppointments = await _schedulingRepository.GetAsync(
-                    a => a.DoctorId == request.DoctorId && a.Date.Date == request.Date.Date && a.PatientCPF == null,
+                    a => a.CRMNumber == request.CRMNumber && a.Date.Date == request.Date.Date && a.PatientCPF == null,
                     cancellationToken);
 
                 var appointmentDtos = availableAppointments.Select(a => new AppointmentDto
                 {
                     AppointmentId = a.Id,
                     AppointmentDate = a.Date,
-                    DoctorId = a.DoctorId
+                    CRMNumber = a.CRMNumber
                 }).ToList();
 
                 return new GetAvailableAppointmentsOutput

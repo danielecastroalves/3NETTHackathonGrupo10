@@ -11,7 +11,7 @@ namespace HealthMed.Application.Features.GetAvailableDoctors
 
     public class DoctorDto
     {
-        public string DoctorId { get; set; }
+        public int DoctorCRM { get; set; }
         public string DoctorName { get; set; }
     }
 }

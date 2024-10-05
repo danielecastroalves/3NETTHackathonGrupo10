@@ -14,6 +14,6 @@ namespace HealthMed.Application.Features.GetAvailableAppointments
     {
         public Guid AppointmentId { get; set; }
         public DateTime AppointmentDate { get; set; }
-        public string DoctorId { get; set; }
+        public int CRMNumber { get; set; }
     }
 }

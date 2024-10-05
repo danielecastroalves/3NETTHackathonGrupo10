@@ -34,12 +34,12 @@ namespace HealthMed.Application.Features.GetAvailableDoctors
 
                 foreach (var doctor in allDoctors)
                 {
-                    var appointments = await _schedulingRepository.GetAsync(a => a.DoctorId == doctor.Id && a.Date == request.Date && a.PatientCPF == null, cancellationToken);
+                    var appointments = await _schedulingRepository.GetAsync(a => a.CRMNumber == doctor.CRM && a.Date == request.Date && a.PatientCPF == null, cancellationToken);
                     if (appointments.Any())
                     {
                         availableDoctors.Add(new DoctorDto
                         {
-                            DoctorId = doctor.Id,
+                            DoctorCRM = doctor.CRM,
                             DoctorName = doctor.Name
                         });
                     }

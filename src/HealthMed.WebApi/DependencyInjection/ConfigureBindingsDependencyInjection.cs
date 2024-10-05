@@ -45,6 +45,12 @@ public static class ConfigureBindingsDependencyInjection
 
         // Services
         services.AddScoped<ITokenService, TokenService>();
+        services.AddSingleton(provider => new EmailService(
+           smtpServer: "smtp.gmail.com",
+           smtpPort: 587,
+           smtpUser: "healthmed953@gmail.com",
+           smtpPass: "Health&MedFiapGrupo10"
+       ));
     }
 
     private static void ConfigureBindingsMediatR(IServiceCollection services)
@@ -70,8 +76,10 @@ public static class ConfigureBindingsDependencyInjection
         services.AddSingleton<IMongoContext, MongoContext>();
 
         //Configure Mongo Repositories
-        services.AddScoped<IRepository<ClienteEntity>, GenericRepository<ClienteEntity>>();
+        services.AddScoped<IRepository<PersonEntity>, GenericRepository<PersonEntity>>();
         services.AddScoped<IRepository<AppointmentSchedulingEntity>, GenericRepository<AppointmentSchedulingEntity>>();
+        services.AddScoped<IRepository<DoctorEntity>, GenericRepository<DoctorEntity>>();
+
         services.AddScoped<IUserRepository, UserRepository>();
 
         //Configure Mongo Serializer
@@ -120,13 +128,5 @@ public static class ConfigureBindingsDependencyInjection
         services.AddValidatorsFromAssembly(new AssemblyReference().GetAssembly());
     }
 
-    private static void ConfigureBindingsServices(IServiceCollection services)
-    {
-        services.AddSingleton(provider => new EmailService(
-            smtpServer: "smtp.gmail.com",
-            smtpPort: 587,
-            smtpUser: "your-email@example.com",
-            smtpPass: "your-password"
-        ));
-    }
+    
 }

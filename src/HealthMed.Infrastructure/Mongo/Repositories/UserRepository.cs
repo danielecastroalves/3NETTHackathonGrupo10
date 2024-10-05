@@ -18,10 +18,10 @@ public class UserRepository : GenericRepository<User>, IUserRepository
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        Expression<Func<ClienteEntity, bool>> filter =
+        Expression<Func<PersonEntity, bool>> filter =
             x => x.Senha == password && x.Login == login && x.Ativo;
 
-        var queryResut = await _context.GetCollection<ClienteEntity>()
+        var queryResut = await _context.GetCollection<PersonEntity>()
             .FindAsync(filter, cancellationToken: cancellationToken);
 
         return await queryResut.FirstOrDefaultAsync(cancellationToken);

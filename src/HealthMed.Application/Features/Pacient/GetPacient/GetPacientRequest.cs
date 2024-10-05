@@ -8,4 +8,4 @@ public class GetPacientRequest : IRequest<GetPacientResponse>
     public string CPF { get; set; } = null!;
 }
 
-public class GetPacientResponse : ClienteEntity;
+public class GetPacientResponse : PersonEntity;

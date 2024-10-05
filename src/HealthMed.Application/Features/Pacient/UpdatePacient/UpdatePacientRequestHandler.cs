@@ -9,11 +9,11 @@ namespace HealthMed.Application.Features.Pacient.UpdatePacient;
 
 public class UpdatePacientRequestHandler
 (
-    IRepository<ClienteEntity> repositorio,
+    IRepository<PersonEntity> repositorio,
     ILogger<UpdatePacientRequestHandler> logger
-) : IRequestHandler<UpdatePacientRequest, ClienteEntity?>
+) : IRequestHandler<UpdatePacientRequest, PersonEntity?>
 {
-    public async Task<ClienteEntity?> Handle(UpdatePacientRequest request, CancellationToken cancellationToken)
+    public async Task<PersonEntity?> Handle(UpdatePacientRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
@@ -23,7 +23,7 @@ public class UpdatePacientRequestHandler
 
         entity.SetUsuarioAtivo();
 
-        entity = request.Adapt<ClienteEntity>();
+        entity = request.Adapt<PersonEntity>();
 
         await repositorio.UpdateAsync(x => x.Id == entity.Id, entity, cancellationToken);
 
