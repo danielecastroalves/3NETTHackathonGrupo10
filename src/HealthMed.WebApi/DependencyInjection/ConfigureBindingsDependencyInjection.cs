@@ -119,4 +119,14 @@ public static class ConfigureBindingsDependencyInjection
     {
         services.AddValidatorsFromAssembly(new AssemblyReference().GetAssembly());
     }
+
+    private static void ConfigureBindingsServices(IServiceCollection services)
+    {
+        services.AddSingleton(provider => new EmailService(
+            smtpServer: "smtp.gmail.com",
+            smtpPort: 587,
+            smtpUser: "your-email@example.com",
+            smtpPass: "your-password"
+        ));
+    }
 }
