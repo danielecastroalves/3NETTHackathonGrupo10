@@ -5,5 +5,6 @@ namespace HealthMed.Domain.Entities
         public int CRMNumber { get; set; }
         public DateTime Date { get; set; }
         public DateTime SchedulingDuration { get; set; }
+        public string? PatientCPF { get; set; }
     }
 }
