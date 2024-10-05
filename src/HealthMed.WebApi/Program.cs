@@ -23,8 +23,8 @@ builder.Services.AddSwaggerGen(c =>
                  new OpenApiInfo
                  {
                      Version = "v1",
-                     Title = "Fintech - Grupo 10",
-                     Description = "Aplicação de Finanças criada para o curso de Pós Graduação em Arquitetura de Sistemas .Net com Azure - FIAP"
+                     Title = "Health&Med - Grupo 10",
+                     Description = "Aplicação de Controle de consultas criada para o curso de Pós Graduação em Arquitetura de Sistemas .Net com Azure - FIAP"
                  });
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

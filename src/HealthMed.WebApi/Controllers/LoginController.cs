@@ -13,13 +13,8 @@ namespace HealthMed.WebApi.Controllers;
 /// </summary>
 [ApiController]
 [Route("v1/login")]
-public sealed class LoginController : CommonController
+public sealed class LoginController(IMediator mediator) : CommonController(mediator)
 {
-    /// <summary>
-    /// Constructor
-    /// </summary>
-    /// <param name="mediator">Mediator DI</param>
-    public LoginController(IMediator mediator) : base(mediator) { }
 
     /// <summary>
     /// Authenticate the user
@@ -37,7 +32,7 @@ public sealed class LoginController : CommonController
     [SwaggerResponse
     (
         (int)HttpStatusCode.NotFound,
-        "Not Found - Invalid User or Password"
+        "Not Found - Invalid Email or Password"
     )]
     [SwaggerResponse
     (
@@ -52,7 +47,7 @@ public sealed class LoginController : CommonController
 
         if (string.IsNullOrWhiteSpace(token))
         {
-            return NotFound(new { message = "Invalid User or Password" });
+            return NotFound(new { message = "Invalid Email or Password" });
         }
         else
         {

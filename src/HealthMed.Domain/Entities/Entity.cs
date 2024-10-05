@@ -17,13 +17,13 @@ public abstract class Entity
 
     public void SetDataInsercao()
     {
-        DataInsercao = DateTime.UtcNow;
+        DataInsercao = DateTime.Now;
         SetDataAtualizacao();
     }
 
     public void SetDataAtualizacao()
     {
-        DataAtualizacao = DateTime.UtcNow;
+        DataAtualizacao = DateTime.Now;
     }
 
     public void SetUsuarioAtivo()

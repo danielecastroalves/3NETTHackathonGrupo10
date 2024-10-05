@@ -29,6 +29,17 @@ public interface IRepository<TEntity> where TEntity : Entity
        CancellationToken cancellationToken = default
     );
 
+    Task<IEnumerable<TEntity>> GetAsync
+    (
+        Expression<Func<TEntity, bool>> filter,
+        CancellationToken cancellationToken = default
+    );
+
+    Task<IEnumerable<TEntity>> GetAllAsync
+    (
+        CancellationToken cancellationToken = default
+    );
+
     Task UpdateAsync
     (
         Expression<Func<TEntity, bool>> filter,
@@ -40,5 +51,12 @@ public interface IRepository<TEntity> where TEntity : Entity
     (
        Guid id,
        CancellationToken cancellationToken = default
+    );
+
+    Task UpdateAppointmentAsync
+    (
+        Expression<Func<AppointmentSchedulingEntity, bool>> filter,
+        AppointmentSchedulingEntity entity,
+        CancellationToken cancellationToken = default
     );
 }

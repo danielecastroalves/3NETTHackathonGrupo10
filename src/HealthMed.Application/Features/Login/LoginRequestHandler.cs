@@ -26,7 +26,7 @@ public class LoginRequestHandler : IRequestHandler<LoginRequest, string>
     public async Task<string> Handle(LoginRequest request, CancellationToken cancellationToken)
     {
         var usuario = await _repository.GetAuthByLoginAndPassword(
-            request.Login,
+            request.Email,
             request.Password,
             cancellationToken);
 
@@ -38,8 +38,8 @@ public class LoginRequestHandler : IRequestHandler<LoginRequest, string>
         _logger.LogInformation(
                 "[Authenticate] " +
                 "[UserToken has been generated successfully] " +
-                "[Login: {login}]",
-                request.Login);
+                "[Email: {Email}]",
+                request.Email);
 
         return response;
     }

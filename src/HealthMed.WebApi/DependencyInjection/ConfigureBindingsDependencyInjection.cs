@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using FluentValidation;
 using HealthMed.Application;
 using HealthMed.Application.Common.Auth.Token;
 using HealthMed.Application.Common.Behavior;
@@ -13,7 +14,6 @@ using HealthMed.Infrastructure.Mongo.Repositories;
 using HealthMed.Infrastructure.Mongo.Utils;
 using HealthMed.Infrastructure.Mongo.Utils.Interfaces;
 using HealthMed.Infrastructure.RabbitMQ;
-using FluentValidation;
 using MediatR;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
@@ -43,13 +43,13 @@ public static class ConfigureBindingsDependencyInjection
     )
     {
         ConfigureBindingsMediatR(services);
-        ConfigureBindingsMongo(services, configuration);
         ConfigureBindingsRabbitMQ(services, configuration);
+        ConfigureBindingsMongo(services, configuration);
         ConfigureBindingsSerilog(services);
         ConfigureBindingsValidators(services);
 
         // Services
-        services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<ITokenService, TokenService>();       
     }
 
     private static void ConfigureBindingsMediatR(IServiceCollection services)
@@ -57,45 +57,6 @@ public static class ConfigureBindingsDependencyInjection
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         services.AddMediatR(new AssemblyReference().GetAssembly());
-    }
-
-    private static void ConfigureBindingsMongo(IServiceCollection services, IConfiguration configuration)
-    {
-        services.Configure<MongoConnectionOptions>(c =>
-        {
-            int defaultTtlDays = configuration.GetValue<int>("Mongo:DefaultTtlDays");
-            c.DefaultTtlDays = defaultTtlDays == default ? 30 : defaultTtlDays;
-
-            c.ConnectionString = configuration.GetValue<string>("Mongo:ConnectionString");
-
-            c.Schema = configuration.GetValue<string>("Mongo:Schema");
-        });
-
-        services.AddSingleton<IMongoConnection, MongoConnection>();
-        services.AddSingleton<IMongoContext, MongoContext>();
-
-        //Configure Mongo Repositories
-        services.AddScoped<IRepository<ClienteEntity>, GenericRepository<ClienteEntity>>();
-        services.AddScoped<IUserRepository, UserRepository>();
-
-        //Configure Mongo Serializer
-        BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
-
-        #pragma warning disable 618
-        BsonDefaults.GuidRepresentation = GuidRepresentation.Standard;
-        BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
-        #pragma warning restore
-
-        #pragma warning disable CS8602
-        var objectSerializer = new ObjectSerializer
-        (
-           type =>
-                   ObjectSerializer.DefaultAllowedTypes(type) ||
-                   type.FullName.StartsWith("Health&Med.Domain")
-        );
-        #pragma warning restore CS8602
-
-        BsonSerializer.RegisterSerializer(objectSerializer);
     }
 
     private static void ConfigureBindingsRabbitMQ(IServiceCollection services, IConfiguration configuration)
@@ -114,6 +75,47 @@ public static class ConfigureBindingsDependencyInjection
 
         // RabbitMQ Services
         services.AddSingleton<IMessagePublisherService, MessagePublisherService>();
+    }
+
+    private static void ConfigureBindingsMongo(IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<MongoConnectionOptions>(c =>
+        {
+            int defaultTtlDays = configuration.GetValue<int>("Mongo:DefaultTtlDays");
+            c.DefaultTtlDays = defaultTtlDays == default ? 30 : defaultTtlDays;
+
+            c.ConnectionString = configuration.GetValue<string>("Mongo:ConnectionString");
+
+            c.Schema = configuration.GetValue<string>("Mongo:Schema");
+        });
+
+        services.AddSingleton<IMongoConnection, MongoConnection>();
+        services.AddSingleton<IMongoContext, MongoContext>();
+
+        //Configure Mongo Repositories
+        services.AddScoped<IRepository<PersonEntity>, GenericRepository<PersonEntity>>();
+        services.AddScoped<IRepository<AppointmentSchedulingEntity>, GenericRepository<AppointmentSchedulingEntity>>();
+
+        services.AddScoped<IUserRepository, UserRepository>();
+
+        //Configure Mongo Serializer
+        BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
+
+#pragma warning disable 618
+        BsonDefaults.GuidRepresentation = GuidRepresentation.Standard;
+        BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
+#pragma warning restore
+
+#pragma warning disable CS8602
+        var objectSerializer = new ObjectSerializer
+        (
+           type =>
+                   ObjectSerializer.DefaultAllowedTypes(type) ||
+                   type.FullName.StartsWith("Health&Med.Domain")
+        );
+#pragma warning restore CS8602
+
+        BsonSerializer.RegisterSerializer(objectSerializer);
     }
 
     private static void ConfigureBindingsSerilog(IServiceCollection services)
