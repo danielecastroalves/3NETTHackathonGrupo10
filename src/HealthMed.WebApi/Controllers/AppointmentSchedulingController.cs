@@ -30,7 +30,11 @@ public sealed class AppointmentSchedulingController(IMediator mediator)
     [SwaggerResponse((int)HttpStatusCode.Created, "Scheduling has been created successfully")]
     [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request - Invalid input or missing required parameters")]
     [SwaggerResponse((int)HttpStatusCode.Unauthorized, "Unauthorized - Invalid credentials or authentication token")]
-    public async Task<IActionResult> CreateAppointmentSchedulingAsync([FromBody] CreateAppointmentSchedulingRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateAppointmentSchedulingAsync
+    (
+        [FromBody] CreateAppointmentSchedulingRequest request,
+        CancellationToken cancellationToken
+    )
     {
         var result = await _mediator.Send(request, cancellationToken);
 
@@ -52,7 +56,11 @@ public sealed class AppointmentSchedulingController(IMediator mediator)
     [SwaggerResponse((int)HttpStatusCode.OK, "Scheduling has been updated successfully")]
     [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request - Invalid input or missing required parameters")]
     [SwaggerResponse((int)HttpStatusCode.Unauthorized, "Unauthorized - Invalid credentials or authentication token")]
-    public async Task<IActionResult> PatchAppointmentSchedulingAsync([FromBody] UpdateAppointmentSchedulingRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> PatchAppointmentSchedulingAsync
+    (
+        [FromBody] UpdateAppointmentSchedulingRequest request,
+        CancellationToken cancellationToken
+    )
     {
         var result = await _mediator.Send(request, cancellationToken);
 
@@ -75,7 +83,12 @@ public sealed class AppointmentSchedulingController(IMediator mediator)
     [SwaggerResponse((int)HttpStatusCode.OK, "The appointment was found successfully")]
     [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request - Invalid input or missing required parameters")]
     [SwaggerResponse((int)HttpStatusCode.Unauthorized, "Unauthorized - Invalid credentials or authentication token")]
-    public async Task<IActionResult> GetAppointmentSchedulingAsync(string crmNumber, DateTime date, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAppointmentSchedulingAsync
+    (
+        string crmNumber,
+        DateTime date,
+        CancellationToken cancellationToken
+    )
     {
         var request = new GetAppointmentSchedulingRequest { CRMNumber = crmNumber, Date = date };
         var result = await _mediator.Send(request, cancellationToken);

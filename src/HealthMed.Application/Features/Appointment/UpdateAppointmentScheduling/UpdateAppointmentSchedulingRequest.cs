@@ -7,6 +7,5 @@ namespace HealthMed.Application.Features.Appointment.UpdateAppointmentScheduling
         public Guid IdSchedule { get; set; }
         public DateTime Date { get; set; }
         public int DurationInMinutes { get; set; }
-        public string PatientCPF { get; set; } = null!;
     }
 }
