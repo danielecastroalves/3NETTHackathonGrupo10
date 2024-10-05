@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-
-namespace HealthMed.Application.Features.GetAvailableDoctors
+namespace HealthMed.Application.Features.Doctor.GetAvailableDoctors
 {
     public class GetAvailableDoctorsOutput
     {

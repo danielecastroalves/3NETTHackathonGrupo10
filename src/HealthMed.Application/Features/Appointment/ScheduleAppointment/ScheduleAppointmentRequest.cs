@@ -1,7 +1,6 @@
-using HealthMed.Application.Features.CreateAppointmentScheduling;
 using MediatR;
 
-namespace HealthMed.Application.Features.ScheduleAppointment
+namespace HealthMed.Application.Features.Appointment.ScheduleAppointment
 {
     public class ScheduleAppointmentRequest : IRequest<ScheduleAppointmentOutput>
     {

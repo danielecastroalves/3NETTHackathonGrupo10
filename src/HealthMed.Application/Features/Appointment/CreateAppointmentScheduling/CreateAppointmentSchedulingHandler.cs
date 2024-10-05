@@ -5,7 +5,7 @@ using Mapster;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace HealthMed.Application.Features.CreateAppointmentScheduling
+namespace HealthMed.Application.Features.Appointment.CreateAppointmentScheduling
 {
     public class CreateAppointmentSchedulingHandler : IRequestHandler<CreateAppointmentSchedulingRequest, CreateAppointmentSchedulingOutput>
     {

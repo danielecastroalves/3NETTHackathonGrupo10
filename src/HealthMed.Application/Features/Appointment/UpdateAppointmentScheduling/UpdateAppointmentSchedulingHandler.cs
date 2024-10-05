@@ -4,7 +4,7 @@ using HealthMed.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace HealthMed.Application.Features.UpdateAppointmentScheduling
+namespace HealthMed.Application.Features.Appointment.UpdateAppointmentScheduling
 {
     public class UpdateAppointmentSchedulingHandler : IRequestHandler<UpdateAppointmentSchedulingRequest, UpdateAppointmentSchedulingOutput>
     {

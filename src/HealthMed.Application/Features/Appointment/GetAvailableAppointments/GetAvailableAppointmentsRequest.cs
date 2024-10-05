@@ -1,7 +1,6 @@
-using HealthMed.Application.Features.GetAvailableAppointments;
 using MediatR;
 
-namespace HealthMed.Application.Features.GetAvaliableAppointments;
+namespace HealthMed.Application.Features.Appointment.GetAvailableAppointments;
 
 public class GetAvailableAppointmentsRequest : IRequest<GetAvailableAppointmentsOutput>
 {

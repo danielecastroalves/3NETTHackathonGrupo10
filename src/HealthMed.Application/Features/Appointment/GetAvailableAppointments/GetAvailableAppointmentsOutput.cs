@@ -1,4 +1,4 @@
-namespace HealthMed.Application.Features.GetAvailableAppointments;
+namespace HealthMed.Application.Features.Appointment.GetAvailableAppointments;
 
 public class GetAvailableAppointmentsOutput
 {

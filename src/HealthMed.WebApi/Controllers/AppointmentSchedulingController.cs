@@ -1,7 +1,7 @@
 using System.Net;
-using HealthMed.Application.Features.CreateAppointmentScheduling;
-using HealthMed.Application.Features.GetAppointmentScheduling;
-using HealthMed.Application.Features.UpdateAppointmentScheduling;
+using HealthMed.Application.Features.Appointment.CreateAppointmentScheduling;
+using HealthMed.Application.Features.Appointment.GetAppointmentScheduling;
+using HealthMed.Application.Features.Appointment.UpdateAppointmentScheduling;
 using HealthMed.WebApi.Controllers.Comum;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

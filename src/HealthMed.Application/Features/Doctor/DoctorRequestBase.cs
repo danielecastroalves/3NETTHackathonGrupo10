@@ -1,5 +1,4 @@
 using FluentValidation;
-using HealthMed.Domain.Enums;
 
 namespace HealthMed.Application.Features.Doctor;
 

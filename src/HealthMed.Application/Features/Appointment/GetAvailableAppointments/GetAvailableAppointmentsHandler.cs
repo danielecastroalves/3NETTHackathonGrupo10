@@ -1,10 +1,9 @@
 using HealthMed.Application.Common.Repositories;
-using HealthMed.Application.Features.GetAvaliableAppointments;
 using HealthMed.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace HealthMed.Application.Features.GetAvailableAppointments;
+namespace HealthMed.Application.Features.Appointment.GetAvailableAppointments;
 
 public class GetAvailableAppointmentsHandler
 (

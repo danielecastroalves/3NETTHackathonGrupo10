@@ -1,12 +1,13 @@
 using System.Text.Json;
 using HealthMed.Application.Common.Repositories;
+using HealthMed.Application.Common.Service;
 using HealthMed.Application.Features.Doctor.GetDoctor;
 using HealthMed.Application.Features.Pacient.GetPacient;
 using HealthMed.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace HealthMed.Application.Features.ScheduleAppointment;
+namespace HealthMed.Application.Features.Appointment.ScheduleAppointment;
 
 public class ScheduleAppointmentHandler
 (

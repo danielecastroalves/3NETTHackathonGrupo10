@@ -1,10 +1,9 @@
 using HealthMed.Application.Common.Repositories;
-using HealthMed.Application.Features.GetAvailableDoctors;
 using HealthMed.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace HealthMed.Application.Features.GetAvaliableDoctors;
+namespace HealthMed.Application.Features.Doctor.GetAvailableDoctors;
 
 public class GetAvailableDoctorsHandler
 (

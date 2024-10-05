@@ -1,7 +1,7 @@
 using System.Net;
-using HealthMed.Application.Features.GetAvailableDoctors;
-using HealthMed.Application.Features.GetAvaliableAppointments;
-using HealthMed.Application.Features.ScheduleAppointment;
+using HealthMed.Application.Features.Appointment.GetAvailableAppointments;
+using HealthMed.Application.Features.Appointment.ScheduleAppointment;
+using HealthMed.Application.Features.Doctor.GetAvailableDoctors;
 using HealthMed.WebApi.Controllers.Comum;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

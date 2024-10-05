@@ -4,6 +4,7 @@ using HealthMed.Application;
 using HealthMed.Application.Common.Auth.Token;
 using HealthMed.Application.Common.Behavior;
 using HealthMed.Application.Common.Repositories;
+using HealthMed.Application.Common.Service;
 using HealthMed.Domain.Entities;
 using HealthMed.Infrastructure.Auth.Token;
 using HealthMed.Infrastructure.Mongo.Contexts;
@@ -45,7 +46,7 @@ public static class ConfigureBindingsDependencyInjection
 
         // Services
         services.AddScoped<ITokenService, TokenService>();
-        services.AddSingleton(provider => new EmailService(
+        services.AddSingleton(_ => new EmailService(
            smtpServer: "smtp.gmail.com",
            smtpPort: 587,
            smtpUser: "healthmed953@gmail.com",
@@ -126,6 +127,4 @@ public static class ConfigureBindingsDependencyInjection
     {
         services.AddValidatorsFromAssembly(new AssemblyReference().GetAssembly());
     }
-
-    
 }

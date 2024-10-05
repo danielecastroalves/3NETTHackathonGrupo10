@@ -1,6 +1,6 @@
 using HealthMed.Domain.Entities;
 
-namespace HealthMed.Application.Features.GetAppointmentScheduling
+namespace HealthMed.Application.Features.Appointment.GetAppointmentScheduling
 {
     public class GetAppointmentSchedulingOutput
     {

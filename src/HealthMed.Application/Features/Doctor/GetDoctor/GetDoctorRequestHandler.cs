@@ -1,10 +1,10 @@
 using System.Text.Json;
 using HealthMed.Application.Common.Repositories;
 using HealthMed.Domain.Entities;
+using HealthMed.Domain.Enums;
 using Mapster;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using HealthMed.Domain.Enums;
 
 namespace HealthMed.Application.Features.Doctor.GetDoctor;
 

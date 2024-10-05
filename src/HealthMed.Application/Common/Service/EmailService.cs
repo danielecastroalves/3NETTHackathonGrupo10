@@ -1,7 +1,7 @@
 using System.Net;
 using System.Net.Mail;
-using System.Threading;
-using System.Threading.Tasks;
+
+namespace HealthMed.Application.Common.Service;
 
 public class EmailService
 {
