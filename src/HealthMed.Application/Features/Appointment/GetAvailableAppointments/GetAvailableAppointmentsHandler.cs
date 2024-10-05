@@ -22,8 +22,10 @@ public class GetAvailableAppointmentsHandler
         try
         {
             var availableAppointments = await schedulingRepository.GetAsync(a =>
-                a.CRMNumber == request.CRMNumber &&
-                a.Date.Date == request.Date.Date &&
+                a.CRMNumber == request.CRM &&
+                a.Date.Date.Day == request.Dia &&
+                a.Date.Date.Month == request.Mes &&
+                a.Date.Date.Year == request.Ano &&
                 a.PatientCPF == null,
                 cancellationToken);
 

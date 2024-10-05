@@ -9,4 +9,3 @@ public class GetDoctorRequest : IRequest<GetDoctorResponse>
 }
 
 public class GetDoctorResponse : PersonEntity;
-

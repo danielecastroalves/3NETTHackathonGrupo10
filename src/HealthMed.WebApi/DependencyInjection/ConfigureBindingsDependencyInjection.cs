@@ -3,8 +3,9 @@ using FluentValidation;
 using HealthMed.Application;
 using HealthMed.Application.Common.Auth.Token;
 using HealthMed.Application.Common.Behavior;
+using HealthMed.Application.Common.Configurations;
 using HealthMed.Application.Common.Repositories;
-using HealthMed.Application.Common.Service;
+using HealthMed.Application.Common.Services;
 using HealthMed.Domain.Entities;
 using HealthMed.Infrastructure.Auth.Token;
 using HealthMed.Infrastructure.Mongo.Contexts;
@@ -12,10 +13,12 @@ using HealthMed.Infrastructure.Mongo.Contexts.Interfaces;
 using HealthMed.Infrastructure.Mongo.Repositories;
 using HealthMed.Infrastructure.Mongo.Utils;
 using HealthMed.Infrastructure.Mongo.Utils.Interfaces;
+using HealthMed.Infrastructure.RabbitMQ;
 using MediatR;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
+using RabbitMQ.Client;
 using Serilog;
 using Serilog.Events;
 using ILogger = Serilog.ILogger;
@@ -40,18 +43,13 @@ public static class ConfigureBindingsDependencyInjection
     )
     {
         ConfigureBindingsMediatR(services);
+        ConfigureBindingsRabbitMQ(services, configuration);
         ConfigureBindingsMongo(services, configuration);
         ConfigureBindingsSerilog(services);
         ConfigureBindingsValidators(services);
 
         // Services
-        services.AddScoped<ITokenService, TokenService>();
-        services.AddSingleton(_ => new EmailService(
-           smtpServer: "smtp.gmail.com",
-           smtpPort: 587,
-           smtpUser: "healthmed953@gmail.com",
-           smtpPass: "Health&MedFiapGrupo10"
-       ));
+        services.AddScoped<ITokenService, TokenService>();       
     }
 
     private static void ConfigureBindingsMediatR(IServiceCollection services)
@@ -59,6 +57,24 @@ public static class ConfigureBindingsDependencyInjection
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         services.AddMediatR(new AssemblyReference().GetAssembly());
+    }
+
+    private static void ConfigureBindingsRabbitMQ(IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<RabbitMqConfig>(configuration.GetSection("RabbitMq"));
+
+        services.AddSingleton(_ =>
+        {
+            var factory = new ConnectionFactory()
+            {
+                Uri = new Uri(configuration.GetValue<string>("RabbitMq:ConnectionString"))
+            };
+
+            return factory.CreateConnection();
+        });
+
+        // RabbitMQ Services
+        services.AddSingleton<IMessagePublisherService, MessagePublisherService>();
     }
 
     private static void ConfigureBindingsMongo(IServiceCollection services, IConfiguration configuration)
@@ -79,25 +95,25 @@ public static class ConfigureBindingsDependencyInjection
         //Configure Mongo Repositories
         services.AddScoped<IRepository<PersonEntity>, GenericRepository<PersonEntity>>();
         services.AddScoped<IRepository<AppointmentSchedulingEntity>, GenericRepository<AppointmentSchedulingEntity>>();
-       
+
         services.AddScoped<IUserRepository, UserRepository>();
 
         //Configure Mongo Serializer
         BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
 
-        #pragma warning disable 618
+#pragma warning disable 618
         BsonDefaults.GuidRepresentation = GuidRepresentation.Standard;
         BsonDefaults.GuidRepresentationMode = GuidRepresentationMode.V3;
-        #pragma warning restore
+#pragma warning restore
 
-        #pragma warning disable CS8602
+#pragma warning disable CS8602
         var objectSerializer = new ObjectSerializer
         (
            type =>
                    ObjectSerializer.DefaultAllowedTypes(type) ||
                    type.FullName.StartsWith("Health&Med.Domain")
         );
-        #pragma warning restore CS8602
+#pragma warning restore CS8602
 
         BsonSerializer.RegisterSerializer(objectSerializer);
     }

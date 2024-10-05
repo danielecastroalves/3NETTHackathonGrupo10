@@ -2,6 +2,7 @@ using HealthMed.Application.Common.Repositories;
 using HealthMed.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using HealthMed.Domain.Enums;
 
 namespace HealthMed.Application.Features.Doctor.GetAvailableDoctors;
 
@@ -22,14 +23,22 @@ public class GetAvailableDoctorsHandler
 
         try
         {
-            var allDoctors = await doctorRepository.GetAllAsync(cancellationToken);
+            var allDoctors = await doctorRepository.GetListByFilterAsync(x =>
+                x.Perfil == Roles.Medico &&
+                !string.IsNullOrWhiteSpace(x.CRM) &&
+                !string.IsNullOrWhiteSpace(x.Especialidade) &&
+                x.Ativo,
+                cancellationToken);
+
             var availableDoctors = new List<DoctorDto>();
 
             foreach (var doctor in allDoctors)
             {
                 var appointments = await schedulingRepository.GetAsync(a =>
                 a.CRMNumber == doctor.CRM &&
-                a.Date == request.Date &&
+                a.Date.Day == request.Date.Day &&
+                a.Date.Month == request.Date.Month &&
+                a.Date.Year == request.Date.Year &&
                 a.PatientCPF == null,
                 cancellationToken);
 

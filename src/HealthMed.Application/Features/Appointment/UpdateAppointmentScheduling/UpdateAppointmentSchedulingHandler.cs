@@ -80,8 +80,7 @@ public class UpdateAppointmentSchedulingHandler
         var entity = new AppointmentSchedulingEntity
         {
             Date = request.Date,
-            SchedulingDuration = request.Date.AddMinutes(request.DurationInMinutes),
-            PatientCPF = request.PatientCPF
+            SchedulingDuration = request.Date.AddMinutes(request.DurationInMinutes)
         };
 
         await schedulingRepository.UpdateAppointmentAsync(x => x.Id == request.IdSchedule, entity, cancellationToken);
