@@ -4,12 +4,13 @@ using HealthMed.Domain.Entities;
 using Mapster;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using HealthMed.Domain.Enums;
 
 namespace HealthMed.Application.Features.Doctor.GetDoctor;
 
 public class GetDoctorRequestHandler
 (
-    IRepository<DoctorEntity> repositorio,
+    IRepository<PersonEntity> repositorio,
     ILogger<GetDoctorRequestHandler> logger
 ) : IRequestHandler<GetDoctorRequest, GetDoctorResponse>
 {
@@ -18,7 +19,9 @@ public class GetDoctorRequestHandler
         cancellationToken.ThrowIfCancellationRequested();
 
         var entity = await repositorio.GetByFilterAsync(x =>
-            x.CRM.Equals(request.CRM) && x.Ativo,
+            x.CRM.Equals(request.CRM) &&
+            x.Perfil == Roles.Medico &&
+            x.Ativo,
             cancellationToken);
 
         var response = entity.Adapt<GetDoctorResponse>();

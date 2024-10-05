@@ -4,6 +4,7 @@ using HealthMed.Domain.Entities;
 using Mapster;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using HealthMed.Domain.Enums;
 
 namespace HealthMed.Application.Features.Pacient.GetPacient;
 
@@ -18,7 +19,9 @@ public class GetPacientRequestHandler
         cancellationToken.ThrowIfCancellationRequested();
 
         var entity = await repositorio.GetByFilterAsync(x =>
-            x.CPF.Equals(request.CPF) && x.Ativo,
+            x.CPF.Equals(request.CPF) &&
+            x.Perfil == Roles.Paciente &&
+            x.Ativo,
             cancellationToken);
 
         var response = entity.Adapt<GetPacientResponse>();

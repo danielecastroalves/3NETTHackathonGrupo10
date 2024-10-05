@@ -18,6 +18,7 @@ public class AddPacientRequestHandler
         cancellationToken.ThrowIfCancellationRequested();
 
         var entity = request.Adapt<PersonEntity>();
+        entity.Perfil = Domain.Enums.Roles.Paciente;
 
         await repositorio.AddAsync(entity, cancellationToken);
 

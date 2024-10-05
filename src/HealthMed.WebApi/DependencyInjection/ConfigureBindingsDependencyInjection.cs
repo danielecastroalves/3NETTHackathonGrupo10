@@ -78,8 +78,7 @@ public static class ConfigureBindingsDependencyInjection
         //Configure Mongo Repositories
         services.AddScoped<IRepository<PersonEntity>, GenericRepository<PersonEntity>>();
         services.AddScoped<IRepository<AppointmentSchedulingEntity>, GenericRepository<AppointmentSchedulingEntity>>();
-        services.AddScoped<IRepository<DoctorEntity>, GenericRepository<DoctorEntity>>();
-
+       
         services.AddScoped<IUserRepository, UserRepository>();
 
         //Configure Mongo Serializer

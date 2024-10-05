@@ -5,13 +5,13 @@ namespace HealthMed.Application.Features.GetAvailableDoctors
     public class GetAvailableDoctorsOutput
     {
         public bool Success { get; set; }
-        public string Description { get; set; }
-        public List<DoctorDto> AvailableDoctors { get; set; }
+        public string Description { get; set; } = null!;
+        public List<DoctorDto> AvailableDoctors { get; set; } = [];
     }
 
     public class DoctorDto
     {
-        public int DoctorCRM { get; set; }
-        public string DoctorName { get; set; }
+        public string DoctorCRM { get; set; } = null!;
+        public string DoctorName { get; set; } = null!;
     }
 }

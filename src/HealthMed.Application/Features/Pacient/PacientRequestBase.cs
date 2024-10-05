@@ -1,5 +1,4 @@
 using FluentValidation;
-using HealthMed.Domain.Enums;
 
 namespace HealthMed.Application.Features.Pacient;
 
@@ -10,7 +9,6 @@ public class PacientRequestBase
 
     public string Email { get; set; } = null!;
     public string Senha { get; set; } = null!;
-    public Roles Permissao { get; set; }
 }
 
 public class PacientRequestBaseValidator<T> : AbstractValidator<T> where T : PacientRequestBase

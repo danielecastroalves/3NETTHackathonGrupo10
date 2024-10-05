@@ -1,11 +1,10 @@
+using HealthMed.Application.Features.GetAvailableAppointments;
 using MediatR;
-using System;
 
-namespace HealthMed.Application.Features.GetAvailableAppointments
+namespace HealthMed.Application.Features.GetAvaliableAppointments;
+
+public class GetAvailableAppointmentsRequest : IRequest<GetAvailableAppointmentsOutput>
 {
-    public class GetAvailableAppointmentsRequest : IRequest<GetAvailableAppointmentsOutput>
-    {
-        public int CRMNumber { get; set; }
-        public DateTime Date { get; set; }
-    }
+    public string CRMNumber { get; set; } = null!;
+    public DateTime Date { get; set; }
 }

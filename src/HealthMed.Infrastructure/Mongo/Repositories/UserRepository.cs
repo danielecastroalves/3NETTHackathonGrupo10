@@ -6,11 +6,9 @@ using MongoDB.Driver;
 
 namespace HealthMed.Infrastructure.Mongo.Repositories;
 
-public class UserRepository : GenericRepository<User>, IUserRepository
+public class UserRepository(IMongoContext context)
+    : GenericRepository<User>(context), IUserRepository
 {
-    public UserRepository(IMongoContext context) : base(context)
-    { }
-
     public async Task<User> GetAuthByLoginAndPassword(
         string login,
         string password,
@@ -19,7 +17,7 @@ public class UserRepository : GenericRepository<User>, IUserRepository
         cancellationToken.ThrowIfCancellationRequested();
 
         Expression<Func<PersonEntity, bool>> filter =
-            x => x.Senha == password && x.Login == login && x.Ativo;
+            x => x.Senha == password && x.Email == login && x.Ativo;
 
         var queryResut = await _context.GetCollection<PersonEntity>()
             .FindAsync(filter, cancellationToken: cancellationToken);
