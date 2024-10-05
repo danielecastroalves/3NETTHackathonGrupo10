@@ -1,4 +1,4 @@
-namespace HealthMed.Application.Features.UpdateAppointmentScheduling
+namespace HealthMed.Application.Features.Appointment.UpdateAppointmentScheduling
 {
     public class UpdateAppointmentSchedulingOutput
     {

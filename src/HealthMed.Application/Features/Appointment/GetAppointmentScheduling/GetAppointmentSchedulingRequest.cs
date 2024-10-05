@@ -1,10 +1,10 @@
 using MediatR;
 
-namespace HealthMed.Application.Features.GetAppointmentScheduling
+namespace HealthMed.Application.Features.Appointment.GetAppointmentScheduling
 {
     public class GetAppointmentSchedulingRequest : IRequest<GetAppointmentSchedulingOutput>
     {
-        public int CRMNumber { get; set; }
+        public string CRMNumber { get; set; } = null!;
         public DateTime Date { get; set; }
     }
 }

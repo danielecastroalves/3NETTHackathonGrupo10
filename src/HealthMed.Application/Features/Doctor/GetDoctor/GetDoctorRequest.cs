@@ -8,4 +8,4 @@ public class GetDoctorRequest : IRequest<GetDoctorResponse>
     public string CRM { get; set; } = null!;
 }
 
-public class GetDoctorResponse : ClienteEntity;
+public class GetDoctorResponse : PersonEntity;

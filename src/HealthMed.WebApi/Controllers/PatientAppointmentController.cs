@@ -1,7 +1,7 @@
 using System.Net;
-using HealthMed.Application.Features.Appointment.CreateAppointmentScheduling;
-using HealthMed.Application.Features.Appointment.GetAppointmentScheduling;
-using HealthMed.Application.Features.Appointment.UpdateAppointmentScheduling;
+using HealthMed.Application.Features.Appointment.GetAvailableAppointments;
+using HealthMed.Application.Features.Appointment.ScheduleAppointment;
+using HealthMed.Application.Features.Doctor.GetAvailableDoctors;
 using HealthMed.WebApi.Controllers.Comum;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -11,28 +11,28 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace HealthMed.WebApi.Controllers;
 
 /// <summary>
-/// AppointmentScheduling Controller
+/// HealthMed Controller
 /// </summary>
 [ApiController]
 [Route("v1")]
-public sealed class AppointmentSchedulingController(IMediator mediator)
+public sealed class PatientAppointmentController(IMediator mediator)
     : CommonController(mediator)
 {
     /// <summary>
-    /// CreateAppointmentSchedulingAsync - Create a new Scheduling
+    /// ScheduleAppointmentAsync - Schedule a new appointment
     /// </summary>
-    /// <param name="request">CreateAppointmentSchedulingRequest</param>
+    /// <param name="request">ScheduleAppointmentRequest</param>
     /// <param name="cancellationToken">Cancellation Token</param>
     /// <returns>Task</returns>
-    [HttpPost("create-appointment-scheduling")]
+    [HttpPost("schedule-appointment")]
     [Authorize]
-    [SwaggerOperation(OperationId = "CreateAppointmentScheduling")]
-    [SwaggerResponse((int)HttpStatusCode.Created, "Scheduling has been created successfully")]
+    [SwaggerOperation(OperationId = "ScheduleAppointment")]
+    [SwaggerResponse((int)HttpStatusCode.OK, "Appointment has been scheduled successfully")]
     [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request - Invalid input or missing required parameters")]
     [SwaggerResponse((int)HttpStatusCode.Unauthorized, "Unauthorized - Invalid credentials or authentication token")]
-    public async Task<IActionResult> CreateAppointmentSchedulingAsync
+    public async Task<IActionResult> ScheduleAppointmentAsync
     (
-        [FromBody] CreateAppointmentSchedulingRequest request,
+        [FromBody] ScheduleAppointmentRequest request,
         CancellationToken cancellationToken
     )
     {
@@ -45,52 +45,74 @@ public sealed class AppointmentSchedulingController(IMediator mediator)
     }
 
     /// <summary>
-    /// PatchAppointmentSchedulingAsync - Update a Scheduling
-    /// </summary>
-    /// <param name="request">UpdateAppointmentSchedulingRequest</param>
-    /// <param name="cancellationToken">Cancellation Token</param>
-    /// <returns>Task</returns>
-    [HttpPatch("patch-appointment-scheduling")]
-    [Authorize]
-    [SwaggerOperation(OperationId = "PatchAppointmentSchedulingAsync")]
-    [SwaggerResponse((int)HttpStatusCode.OK, "Scheduling has been updated successfully")]
-    [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request - Invalid input or missing required parameters")]
-    [SwaggerResponse((int)HttpStatusCode.Unauthorized, "Unauthorized - Invalid credentials or authentication token")]
-    public async Task<IActionResult> PatchAppointmentSchedulingAsync
-    (
-        [FromBody] UpdateAppointmentSchedulingRequest request,
-        CancellationToken cancellationToken
-    )
-    {
-        var result = await _mediator.Send(request, cancellationToken);
-
-        if (result.Success)
-            return Ok(result);
-
-        return StatusCode(500, result);
-    }
-
-    /// <summary>
-    /// GetAppointmentSchedulingAsync - Get all Scheduling by Date
+    /// GetAvailableAppointmentsAsync - Get available appointments
     /// </summary>
     /// <param name="crmNumber">CRMNumber</param>
-    /// <param name="date">Date</param>
+    /// <param name="dia">Dia</param>
+    /// <param name="mes">Mês</param>
+    /// <param name="ano">Ano</param>
     /// <param name="cancellationToken">Cancellation Token</param>
     /// <returns>Task</returns>
-    [HttpGet("get-appointment-scheduling")]
+    [HttpGet("available-appointments")]
     [Authorize]
-    [SwaggerOperation(OperationId = "GetAppointmentSchedulingAsync")]
-    [SwaggerResponse((int)HttpStatusCode.OK, "The appointment was found successfully")]
+    [SwaggerOperation(OperationId = "GetAvailableAppointments")]
+    [SwaggerResponse((int)HttpStatusCode.OK, "Available appointments retrieved successfully")]
     [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request - Invalid input or missing required parameters")]
     [SwaggerResponse((int)HttpStatusCode.Unauthorized, "Unauthorized - Invalid credentials or authentication token")]
-    public async Task<IActionResult> GetAppointmentSchedulingAsync
+    public async Task<IActionResult> GetAvailableAppointmentsAsync
     (
         string crmNumber,
-        DateTime date,
+        int dia,
+        int mes,
+        int ano,
         CancellationToken cancellationToken
     )
     {
-        var request = new GetAppointmentSchedulingRequest { CRMNumber = crmNumber, Date = date };
+        var request = new GetAvailableAppointmentsRequest
+        {
+            CRM = crmNumber,
+            Dia = dia,
+            Mes = mes,
+            Ano = ano
+        };
+
+        var result = await _mediator.Send(request, cancellationToken);
+
+        if (result.Success)
+            return Ok(result);
+
+        return StatusCode(500, result);
+    }
+
+    /// <summary>
+    /// GetAvailableDoctorsAsync - Get available doctors
+    /// </summary>
+    /// <param name="dia">Dia</param>
+    /// <param name="mes">Mês</param>
+    /// <param name="ano">Ano</param>
+    /// <param name="cancellationToken">Cancellation Token</param>
+    /// <returns>Task</returns>
+    [HttpGet("available-doctors")]
+    [Authorize]
+    [SwaggerOperation(OperationId = "GetAvailableDoctors")]
+    [SwaggerResponse((int)HttpStatusCode.OK, "Available doctors retrieved successfully")]
+    [SwaggerResponse((int)HttpStatusCode.BadRequest, "Bad Request - Invalid input or missing required parameters")]
+    [SwaggerResponse((int)HttpStatusCode.Unauthorized, "Unauthorized - Invalid credentials or authentication token")]
+    public async Task<IActionResult> GetAvailableDoctorsAsync
+    (
+        int dia,
+        int mes,
+        int ano,
+        CancellationToken cancellationToken
+    )
+    {
+        var data = new DateTime(ano, mes, dia, 0, 0, 0, DateTimeKind.Local);
+
+        var request = new GetAvailableDoctorsRequest
+    {
+            Date = data
+        };
+
         var result = await _mediator.Send(request, cancellationToken);
 
         if (result.Success)

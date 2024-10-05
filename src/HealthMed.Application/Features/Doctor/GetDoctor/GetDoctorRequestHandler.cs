@@ -1,6 +1,7 @@
 using System.Text.Json;
 using HealthMed.Application.Common.Repositories;
 using HealthMed.Domain.Entities;
+using HealthMed.Domain.Enums;
 using Mapster;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -9,7 +10,7 @@ namespace HealthMed.Application.Features.Doctor.GetDoctor;
 
 public class GetDoctorRequestHandler
 (
-    IRepository<ClienteEntity> repositorio,
+    IRepository<PersonEntity> repositorio,
     ILogger<GetDoctorRequestHandler> logger
 ) : IRequestHandler<GetDoctorRequest, GetDoctorResponse>
 {
@@ -18,7 +19,9 @@ public class GetDoctorRequestHandler
         cancellationToken.ThrowIfCancellationRequested();
 
         var entity = await repositorio.GetByFilterAsync(x =>
-            x.Documento.Equals(request.CRM) && x.Ativo,
+            x.CRM.Equals(request.CRM) &&
+            x.Perfil == Roles.Medico &&
+            x.Ativo,
             cancellationToken);
 
         var response = entity.Adapt<GetDoctorResponse>();

@@ -73,6 +73,33 @@ public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : E
         return await result.ToListAsync(cancellationToken);
     }
 
+    public virtual async Task<IEnumerable<TEntity>> GetAsync
+   (
+       Expression<Func<TEntity, bool>> filter,
+       CancellationToken cancellationToken = default
+   )
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var result = await _context.GetCollection<TEntity>()
+            .FindAsync(filter, cancellationToken: cancellationToken);
+
+        return await result.ToListAsync(cancellationToken);
+    }
+
+    public virtual async Task<IEnumerable<TEntity>> GetAllAsync
+    (
+        CancellationToken cancellationToken = default
+    )
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var result = await _context.GetCollection<TEntity>()
+            .FindAsync(_ => true, cancellationToken: cancellationToken);
+
+        return await result.ToListAsync(cancellationToken);
+    }
+
     public virtual async Task UpdateAsync
     (
         Expression<Func<TEntity, bool>> filter,
@@ -119,4 +146,6 @@ public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : E
 
         return queryResut.IsAcknowledged;
     }
+
+
 }

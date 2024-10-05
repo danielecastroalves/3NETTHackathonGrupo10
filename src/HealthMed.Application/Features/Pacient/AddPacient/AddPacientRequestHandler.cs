@@ -9,7 +9,7 @@ namespace HealthMed.Application.Features.Pacient.AddPacient;
 
 public class AddPacientRequestHandler
 (
-    IRepository<ClienteEntity> repositorio,
+    IRepository<PersonEntity> repositorio,
     ILogger<AddPacientRequestHandler> logger
 ) : IRequestHandler<AddPacientRequest>
 {
@@ -17,7 +17,8 @@ public class AddPacientRequestHandler
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        var entity = request.Adapt<ClienteEntity>();
+        var entity = request.Adapt<PersonEntity>();
+        entity.Perfil = Domain.Enums.Roles.Paciente;
 
         await repositorio.AddAsync(entity, cancellationToken);
 

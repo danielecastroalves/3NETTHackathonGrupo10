@@ -8,7 +8,7 @@ namespace HealthMed.Application.Features.Doctor.DeleteDoctor;
 
 public class DeleteDoctorRequestHandler
 (
-    IRepository<ClienteEntity> repositorio,
+    IRepository<PersonEntity> repositorio,
     ILogger<DeleteDoctorRequestHandler> logger
 ) : IRequestHandler<DeleteDoctorRequest>
 {
